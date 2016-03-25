@@ -54,7 +54,7 @@ public class GetBeaconInfo extends HttpServlet {
 	}
 	public ArrayList<iBeacon> getBeaconInfo(){
 		iBeacon ibeacon;
-		String sql = "select iBeaconNode_Name,iBeaconNode_Mac from iBeaconNode";
+		String sql = "select iname,iaddress from iBeacon";
 		ResultSet rs =null;
 	    dbHelper db;
 		try {

@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URLDecoder;
-import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
@@ -18,8 +17,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.bean.AnchorNode;
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 /**
  * Servlet implementation class GetDataFromClient
@@ -27,9 +24,9 @@ import com.google.gson.JsonParser;
 @WebServlet("/GetDataFromClient")
 public class GetDataFromClient extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private String sql1 = "insert into AnchorNode (AnchorNode_Mac,AnchorNode_Name,AnchorNode_X,AnchorNode_Y) values (?,?,?,?)";
-	private String sql2 = "insert into iBeaconNode (iBeaconNode_Mac,iBeaconNode_Name) values (?,?)";
-	private String sql3 ="insert into ScanRecord (ScanTimeStamp,AnchorNode_Mac,iBeaconNode_Mac,iBeacon_Rssi,AnchorNode_Location) values (?,?,?,?,?)";
+	private String sql1 = "insert into AnchorNode(aaddress, aname, ax, ay, alocation) values (?,?,?,?,?)";
+	private String sql2 = "insert into iBeacon (iaddress, iname,iuuid, imajor, iminor, irssi,tx_power) values (?,?,?,?,?,?,?)";
+	private String sql3 ="insert into ScanRecord (ScanTimeStamp, aaddr, iaddr, irssi, alocation) values (?,?,?,?,?)";
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -66,11 +63,12 @@ public class GetDataFromClient extends HttpServlet {
 	      //插入表AnchorNode:
 		  try {
 				db = new dbHelper(sql1);
-				if(!hasMac("AnchorNode",anchornode.getAnchor_mac())){
-					db.pst.setString(1, anchornode.getAnchor_mac());
-					db.pst.setString(2, anchornode.getAnchor_name());
-					db.pst.setFloat(3, anchornode.getAnchor_x());
-					db.pst.setFloat(4, anchornode.getAnchor_y());
+				if(!hasMac("AnchorNode",anchornode.getA_address(),"aaddress")){
+					db.pst.setString(1, anchornode.getA_address());
+					db.pst.setString(2, anchornode.getA_name());
+					db.pst.setFloat(3, anchornode.getA_x());
+					db.pst.setFloat(4, anchornode.getA_y());
+					db.pst.setString(5, "("+anchornode.getA_x()+","+anchornode.getA_y()+")");
 					db.pst.executeUpdate();
 					System.out.println("表1更新成功");	
 				}
@@ -84,9 +82,14 @@ public class GetDataFromClient extends HttpServlet {
 		  try {
 			  db = new dbHelper(sql2);
 		      for(String beaconmac:anchornode.getScanresult().keySet()){
-		    	  if(!hasMac("iBeaconNode",beaconmac)){
+		    	  if(!hasMac("iBeacon",beaconmac,"iaddress")){
 						db.pst.setString(1, beaconmac);
 						db.pst.setString(2, anchornode.getScanresult().get(beaconmac).getName());
+						db.pst.setString(3, anchornode.getScanresult().get(beaconmac).getUuid());
+						db.pst.setInt(4, anchornode.getScanresult().get(beaconmac).getMajor());
+						db.pst.setInt(5, anchornode.getScanresult().get(beaconmac).getMinor());
+						db.pst.setInt(6, anchornode.getScanresult().get(beaconmac).getRssi());
+						db.pst.setInt(7, anchornode.getScanresult().get(beaconmac).getTx_power());
 						db.pst.executeUpdate();
 		    	  }
 		      }
@@ -105,11 +108,11 @@ public class GetDataFromClient extends HttpServlet {
 					//db.pst.setDate(1, new Date(new java.util.Date().getTime()));
 					Timestamp date = Timestamp.valueOf(getCurrentTime());
 					db.pst.setTimestamp(1, date);
-					System.out.println(date);
-					db.pst.setString(2, anchornode.getAnchor_mac());
+					//System.out.println(date);
+					db.pst.setString(2, anchornode.getA_address());
 					db.pst.setString(3, beaconmac);
-					db.pst.setFloat(4, anchornode.getScanresult().get(beaconmac).getRSSI());
-					db.pst.setString(5,"("+anchornode.getAnchor_x()+","+anchornode.getAnchor_y()+")");
+					db.pst.setInt(4, anchornode.getScanresult().get(beaconmac).getRssi());
+					db.pst.setString(5,"("+anchornode.getA_x()+","+anchornode.getA_y()+")");
 					db.pst.executeUpdate();
 					System.out.println("存储数据成功");
 			} catch (IOException e) {
@@ -120,9 +123,8 @@ public class GetDataFromClient extends HttpServlet {
 	      }
 	  }
 	
-	 public static boolean hasMac(String tablename,String Mac) throws SQLException {
-		 String columnname = tablename+"_Mac";   
-		 String sql = "select * from "+tablename+" where "+columnname+"='" + Mac + "'";
+	 public static boolean hasMac(String tablename,String Mac,String column) throws SQLException {
+		String sql = "select * from "+tablename+" where "+column+"='" + Mac + "'";
 	    ResultSet rs =null;
 	    System.out.println(sql);
 	    dbHelper db;

@@ -1,21 +1,36 @@
 package com.bean;
 public class iBeacon {
 	private String name;
-	private String time;
-	private String address;
-	private int RSSI;
-	private String iLocation;
-//	private String uuid;
-//	private int major;
-//	private int minor;
-//	private int txPower;
-//	private double distance;
-	
-	public String getTime() {
-		return time;
+	private String address;  // 设备地址（Mac）  
+	private String uuid;     // Proximity UUID  
+	private int major;       // Major  
+	private int minor;       // Minor  
+	private int rssi;        // 场强 
+	private int tx_power;
+	private String location;
+	public String getAddress() {
+		return address;
 	}
-	public void setTime(String time) {
-		this.time = time;
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	public String getUuid() {
+		return uuid;
+	}
+	public void setUuid(String uuid) {
+		this.uuid = uuid;
+	}
+	public int getMajor() {
+		return major;
+	}
+	public void setMajor(int major) {
+		this.major = major;
+	}
+	public int getMinor() {
+		return minor;
+	}
+	public void setMinor(int minor) {
+		this.minor = minor;
 	}
 	public String getName() {
 		return name;
@@ -23,56 +38,23 @@ public class iBeacon {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-	
-//	
-//	public double getDistance() {
-//		return distance;
-//	}
-//	public void setDistance(double distance) {
-//		this.distance = distance;
-//	}
-//	public int getTxPower() {
-//		return txPower;
-//	}
-//	public void setTxPower(int txPower) {
-//		this.txPower = txPower;
-//	}
-	public String getAddress() {
-		return address;
+	public String getLocation() {
+		return location;
 	}
-	public void setAddress(String address) {
-		this.address = address;
+	public void setIlocation(String ilocation) {
+		this.location = ilocation;
 	}
-//	public String getUuid() {
-//		return uuid;
-//	}
-//	public void setUuid(String uuid) {
-//		this.uuid = uuid;
-//	}
-//	public int getMajor() {
-//		return major;
-//	}
-//	public void setMajor(int major) {
-//		this.major = major;
-//	}
-//	public int getMinor() {
-//		return minor;
-//	}
-//	public void setMinor(int minor) {
-//		this.minor = minor;
-//	}
-	public int getRSSI() {
-		return RSSI;
+	public int getRssi() {
+		return rssi;
 	}
-	public void setRSSI(int rSSI) {
-		RSSI = rSSI;
+	public void setRssi(int rssi) {
+		this.rssi = rssi;
 	}
-	public String getiLocation() {
-		return iLocation;
+	public int getTx_power() {
+		return tx_power;
 	}
-	public void setiLocation(String iLocation) {
-		this.iLocation = iLocation;
+	public void setTx_power(int tx_power) {
+		this.tx_power = tx_power;
 	}
 
 }

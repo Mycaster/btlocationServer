@@ -14,7 +14,6 @@
       <!-- Bootstrap -->
       <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
    	  <link href="bootstrap/css/bootstrap-select.css" rel="stylesheet" >
-      
       <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 	  <script src="http://cdn.bootcss.com/jquery/1.11.2/jquery.min.js"></script>
 	  <script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -107,10 +106,11 @@
 	  		    data: selected,
 	  		    dataType : 'json', 
 	  		    success : function(data){
+	  		    	$(".locationlist").remove();
 	  		    	console.log("success");
 	  		    	var result="";
 	  		    	$.each(data, function(i, item) {
-	  		    		$("#showlocation").after("<h3 class ='text-center text-success' >"+item.name+"--"+item.address+":  "+item.iLocation+"</h3>");
+	  		    		$("#showlocation").after("<h3 class ='text-center text-success locationlist' >"+item.name+"--"+item.address+":  "+item.location+"米 </h3>");
    			    	}); 
 	  		    }
 	  		  });    

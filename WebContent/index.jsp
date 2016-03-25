@@ -46,9 +46,9 @@
    			    		//console.log(item.time);
 					 	var newRow = "<tr ><td>"+
 					 				item.time+"</td><td>"+
-					 				item.anchornode_mac+"</td><td>"+
-					 				item.location+"</td><td>"+
-					 				item.ibeacon_mac+"</td><td>"+
+					 				item.a_addr+"</td><td>"+
+					 				item.a_location+"</td><td>"+
+					 				item.i_addr+"</td><td>"+
 					 				item.rssi+"</td><td>"+"<button type='button' class='btn btn-primary' data-toggle='collapse' data-target='#demo'> 展开扫描到的节点</button></td></tr>";
 					 	$("#record tr:last").after(newRow);
    			    	}); 

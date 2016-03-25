@@ -51,7 +51,7 @@ public class GetScanRecord extends HttpServlet {
 	}
 	public ArrayList<ScanRecord> getScanRecord(){
 		ScanRecord record;
-		String sql = "select ScanTimeStamp,AnchorNode_Mac,iBeaconNode_Mac,iBeacon_Rssi,AnchorNode_Location from ScanRecord";
+		String sql = "select ScanTimeStamp,aaddr,iaddr,irssi,alocation from ScanRecord order by  ScanTimeStamp DESC";
 		ResultSet rs =null;
 	    dbHelper db;
 		try {
@@ -60,10 +60,10 @@ public class GetScanRecord extends HttpServlet {
 			while (rs.next()){
 				record = new ScanRecord();
 				record.setTime(rs.getTimestamp(1).toString());
-				record.setAnchornode_mac(rs.getString(2));
-				record.setIbeacon_mac(rs.getString(3));
+				record.setA_addr(rs.getString(2));
+				record.setI_addr(rs.getString(3));
 				record.setRssi(rs.getFloat(4));
-				record.setLocation(rs.getString(5));
+				record.setA_location(rs.getString(5));
 				recordlist.add(record);
 			}
 			db.close();
