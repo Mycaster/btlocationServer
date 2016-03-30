@@ -1,5 +1,6 @@
 package com.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,7 +27,6 @@ public class GetScanRecord extends HttpServlet {
      */
     public GetScanRecord() {
         super();
-        // TODO Auto-generated constructor stub
     }
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -41,17 +41,24 @@ public class GetScanRecord extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		 // TODO Auto-generated method stub
+		 BufferedReader br = request.getReader();
+         String line = null;
+         StringBuilder sb = new StringBuilder();
+         while((line = br.readLine())!=null){
+            sb.append(line);
+         }
+         String aaddr = sb.toString();
 		 Gson gson = new Gson();
-		 String data =gson.toJson(getScanRecord());
-		 System.out.println(data);
+		 String data =gson.toJson(getScanRecord(aaddr));
 	     response.getWriter().print(data);
 	     System.out.println("已返回数据至前台");
 	     recordlist.clear();//记得清空数据
 	}
-	public ArrayList<ScanRecord> getScanRecord(){
+	public ArrayList<ScanRecord> getScanRecord(String aaddr){
 		ScanRecord record;
-		String sql = "select ScanTimeStamp,aaddr,iaddr,irssi,alocation from ScanRecord order by  ScanTimeStamp DESC";
+		//根据前台的Mac地址查询扫描数据
+		String sql = "select ScanTimeStamp,iaddr,irssi from ScanRecord  where aaddr='"+aaddr+"' order by  ScanTimeStamp DESC limit 30";
 		ResultSet rs =null;
 	    dbHelper db;
 		try {
@@ -59,11 +66,10 @@ public class GetScanRecord extends HttpServlet {
 			rs = db.pst.executeQuery(sql);
 			while (rs.next()){
 				record = new ScanRecord();
-				record.setTime(rs.getTimestamp(1).toString());
-				record.setA_addr(rs.getString(2));
-				record.setI_addr(rs.getString(3));
-				record.setRssi(rs.getFloat(4));
-				record.setA_location(rs.getString(5));
+				String time = rs.getTimestamp(1).toString();
+				record.setTime(time.substring(5,time.length()-2));
+				record.setI_addr(rs.getString(2));
+				record.setRssi(rs.getFloat(3));
 				recordlist.add(record);
 			}
 			db.close();

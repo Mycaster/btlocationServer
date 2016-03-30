@@ -8,7 +8,7 @@
 <html lang="zh-CN">
    <head>
    <%request.setAttribute("MENU_INDEX", "index");%>
-   <%@include file="header.jsp"%>
+   <%@include file="navbar.jsp"%>
    </head>
 	<script type="text/javascript">
 		function getReady(){
@@ -32,8 +32,7 @@
 				});
 		}
 	</script>
-   <body onload=" getReady()">
-   		<%@include file="navbar.jsp"%>
+    <body onload=" getReady()">
 		<div class="container-fluid">
 			<div class="row-fluid">
 		        <form class="form-horizontal" role="form">

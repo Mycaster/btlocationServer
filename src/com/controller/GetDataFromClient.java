@@ -24,9 +24,9 @@ import com.google.gson.Gson;
 @WebServlet("/GetDataFromClient")
 public class GetDataFromClient extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private String sql1 = "insert into AnchorNode(aaddress, aname, ax, ay, alocation) values (?,?,?,?,?)";
+	private String sql1 = "insert into AnchorNode(aaddress, aname, ax, ay) values (?,?,?,?)";
 	private String sql2 = "insert into iBeacon (iaddress, iname,iuuid, imajor, iminor, irssi,tx_power) values (?,?,?,?,?,?,?)";
-	private String sql3 ="insert into ScanRecord (ScanTimeStamp, aaddr, iaddr, irssi, alocation) values (?,?,?,?,?)";
+	private String sql3 ="insert into ScanRecord (ScanTimeStamp, aaddr, iaddr, irssi, ax,ay) values (?,?,?,?,?,?)";
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -68,7 +68,6 @@ public class GetDataFromClient extends HttpServlet {
 					db.pst.setString(2, anchornode.getA_name());
 					db.pst.setFloat(3, anchornode.getA_x());
 					db.pst.setFloat(4, anchornode.getA_y());
-					db.pst.setString(5, "("+anchornode.getA_x()+","+anchornode.getA_y()+")");
 					db.pst.executeUpdate();
 					System.out.println("表1更新成功");	
 				}
@@ -112,7 +111,8 @@ public class GetDataFromClient extends HttpServlet {
 					db.pst.setString(2, anchornode.getA_address());
 					db.pst.setString(3, beaconmac);
 					db.pst.setInt(4, anchornode.getScanresult().get(beaconmac).getRssi());
-					db.pst.setString(5,"("+anchornode.getA_x()+","+anchornode.getA_y()+")");
+					db.pst.setFloat(5, anchornode.getA_x());
+					db.pst.setFloat(6, anchornode.getA_y());
 					db.pst.executeUpdate();
 					System.out.println("存储数据成功");
 			} catch (IOException e) {

@@ -31,13 +31,12 @@ public class dbHelper
 	    try
 	    {
 	    	Class.forName(JDBC_CLASS);
-	    	System.out.println("Success loading Mysql Driver!");
+	    	//System.out.println("Success loading Mysql Driver!");
 	    	//获取连接
     		connection = DriverManager.getConnection(DataBaseAddress, USER_NAME, USER_PASSWORD);
-    	      //准备执行语句
+    	     //准备执行语句
     	     pst = connection.prepareStatement(sql);//准备执行语句
         } catch (SQLException e) {
-		// TODO Auto-generated catch block
 		e.printStackTrace();
 	    } catch (Exception e) {
 	      System.out.print("Error loading Mysql Driver!");

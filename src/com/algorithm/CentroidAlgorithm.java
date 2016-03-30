@@ -14,6 +14,7 @@ public class CentroidAlgorithm {
 		//String sql = "select irssi  from ScanRecord where iaddress= '"+Mac+"'&& order by ScanTimeStamp limit 3";
 		//取前三项数据进行平均
 		String sql = "select scanrecord.irssi,tx_power from ibeacon inner join scanrecord where iBeacon.iaddress='"+Mac+"' order by scanrecord.ScanTimeStamp DESC limit 3";
+		
 		ResultSet rs =null;
 	    dbHelper db;
 	    int rssi =0,tx_power=0;
@@ -31,6 +32,7 @@ public class CentroidAlgorithm {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		//取前三项扫描数据做平均后得出距离
 		result = new RssiToDis(tx_power/3, rssi/3).calculateDistance();
 		return String.format("%.2f", result);
 	}
